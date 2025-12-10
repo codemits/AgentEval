@@ -11,7 +11,6 @@
     "agent": "npm run build && node dist/agentRunner.js",
     "start": "npm run build && node dist/agentRunner.js",
     "evaluate": "npm run build && node dist/evaluate.js",
-    "test": "npm run build && ./test.sh",
     "dev:mock": "tsx watch src/mock-server.ts",
     "lint": "tsc --noEmit"
   },
@@ -26,12 +25,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/agent-eval.git"
+    "url": "git+https://github.com/codemits/AgentEval.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/agent-eval/issues"
+    "url": "https://github.com/codemits/AgentEval/issues"
   },
-  "homepage": "https://github.com/yourusername/agent-eval#readme",
+  "homepage": "https://github.com/codemits/AgentEval#readme",
   "dependencies": {
     "ajv": "^8.12.0",
     "dotenv": "^17.2.3",
