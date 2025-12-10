@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Lint
+      run: npm run lint
+
+    - name: Build
+      run: npm run build
+
+    - name: Start mock server
+      run: npm run start:mock &
+
+    - name: Wait for server
+      run: sleep 3
+
+    - name: Run tests
+      run: npm test
+
+    - name: Check for secrets
+      run: |
+        if grep -r "password\|secret\|api_key\|token" --include="*.ts" --include="*.js" src/; then
+          echo "⚠️ Warning: Potential secrets found in source code"
+          exit 1
+        fi
+
+    - name: Upload test artifacts
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results-${{ matrix.node-version }}
+        path: |
+          trace.json
+          report.json
+          report.html
